@@ -63,14 +63,14 @@ class _ChatScreenState extends State<ChatScreen> {
     widget.socket.on('chat', ((data) {
       print("CHAT DATA");
       print(data["data"]);
-      if(this.mounted){
-      setState(() {
-        messages.insert(0, {
-          'message': data["data"],
-          'isUserMessage': false,
-          'userName': "Other"
+      if (this.mounted) {
+        setState(() {
+          messages.insert(0, {
+            'message': data["data"],
+            'isUserMessage': false,
+            'userName': "Other"
+          });
         });
-      });
       }
     }));
   }
@@ -162,7 +162,7 @@ class _NewMessageState extends State<NewMessage> {
 
   void _startListeningText() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String locale = preferences.getString("locale")!;
+    String locale = preferences.getString("locale") ?? "en";
     print("locale");
     await _speechToText.listen(onResult: _onSpeechResultText, localeId: locale);
     await _speechToText.listen(onResult: _onSpeechResultText);

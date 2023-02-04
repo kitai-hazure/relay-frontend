@@ -62,6 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
     widget.socket.on('chat', ((data) {
       print("CHAT DATA");
       print(data["data"]);
+      if(this.mounted){
       setState(() {
         messages.insert(0, {
           'message': data["data"],
@@ -69,6 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
           'userName': "Other"
         });
       });
+      }
     }));
   }
 
@@ -127,11 +129,6 @@ class _NewMessageState extends State<NewMessage> {
 
     widget.addMsg(_controller.text, true, username);
     FocusScope.of(context).unfocus();
-  }
-
-  void dispose() {
-    //dialogFlowtter.dispose();
-    super.dispose();
   }
 
   SpeechToText _speechToText = SpeechToText();

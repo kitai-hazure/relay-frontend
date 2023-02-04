@@ -54,9 +54,6 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void initSocket(){
-    
-  }
   
   @override
   void initState() {
@@ -66,6 +63,13 @@ class _ChatScreenState extends State<ChatScreen> {
     widget.socket.on('chat',((data){
       print("CHAT DATA");
       print(data);
+      setState(() {
+        messages.insert(0, {
+          'message': data["message"],
+          'isUserMessage': false,
+          'userName': "Other"
+        });
+      });
     }));
   }
 

@@ -115,7 +115,7 @@ class NewMessage extends StatefulWidget {
 }
 
 class _NewMessageState extends State<NewMessage> {
-  final _controller = new TextEditingController();
+  final _controller = TextEditingController();
   String hintText = "";
 
   void _sendMessage() async {
@@ -223,12 +223,6 @@ class _NewMessageState extends State<NewMessage> {
                     contentPadding: const EdgeInsets.only(bottom: 10),
                     hintText: hintText == "" ? 'Send a message..' : hintText,
                     border: InputBorder.none),
-                onChanged: (value) {
-                  setState(() {
-                    //will update entered message with every keystroke
-                    _controller.text = value;
-                  });
-                },
               ),
             ),
           ),

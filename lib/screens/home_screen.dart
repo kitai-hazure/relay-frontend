@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:relay/constants/graphql_endpoint.dart';
 import 'package:relay/constants/queries.dart';
 import 'package:relay/models/user_model.dart';
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Position _currentPosition;
   late IO.Socket socket;
 
-  List<User> x = [];
+  late Future _future;
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -75,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     initSocket(token, pos.latitude.toString(), pos.longitude.toString());
     setState(() {
       // socket = soc;
+      this.token = token;
       _currentPosition = pos;
       isLoading = false;
     });
@@ -82,17 +84,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   initSocket(String token, String lat, String long) {
     socket = IO.io(
-        'http://192.168.142.210:8080/?token=$token&latitute=$lat&longitude=$long',
+        'https://relay-backend.azurewebsites.net/?token=$token&latitute=$lat&longitude=$long',
         <String, dynamic>{
           'autoConnect': false,
           'transports': ['websocket'],
         });
     socket.connect();
-    socket.onConnect((_) async{
+    socket.onConnect((_) async {
       print('Connection established');
-      // setState(() {
       await _getUsers(token);
-      // });
     });
     socket.onDisconnect((_) => print('Connection Disconnection'));
     socket.onConnectError((err) => print(err));
@@ -127,13 +127,18 @@ class _HomeScreenState extends State<HomeScreen> {
       print(result.data);
       List<User> users = [];
       for (var x in result.data!["findPeople"]) {
+        print(x["user"].toString());
         users.add(User(
-            uid: x["user"]["userId"],
-            lat: x["user"]["latitude"],
-            long: x["user"]["longitude"]));
+          id: x["user"]["id"],
+          name: x["user"]["name"],
+          language: x["user"]["language"],
+          profilePic: x["user"]["profilePicture"],
+        ));
       }
-
-      x = users;
+      // setState(() {
+      //   x = users;
+      // });
+      // x = users;
 
       print("DONE");
       return users;
@@ -169,7 +174,104 @@ class _HomeScreenState extends State<HomeScreen> {
                   setState(() => _currentIndex = index);
                 },
                 children: <Widget>[
-                  STTPage(),
+                  // Text(x[0].uid.toString()),
+                  FutureBuilder(
+                      future: _getUsers(token),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          print(snapshot.data);
+                          if (snapshot.hasData) {
+                            return Scaffold(
+                              // backgroundColor: Colors.blue,
+                              body: SafeArea(
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 5,
+                                        child: Stack(
+                                          children: [
+                                            LottieBuilder.asset(
+                                              "assets/lottie/radar.json",
+                                              width: double.infinity,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                            Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                    "Finding Users Near You",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 25))),
+                                          ],
+                                          alignment: Alignment.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 10,
+                                        child: Container(
+                                          width: double.infinity,
+                                          decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight:
+                                                      Radius.circular(20)),
+                                              color: Colors.white),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.all(16),
+                                                child: Text(
+                                                  'Users near you.....',
+                                                  style:
+                                                      TextStyle(fontSize: 20.0),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: ListView.builder(
+                                                    physics:
+                                                        const NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount:
+                                                        snapshot.data!.length,
+                                                    itemBuilder: (ctx, index) {
+                                                      return ListTile(
+                                                        leading: CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                        ),
+                                                        title: Text(snapshot
+                                                            .data![index].name),
+                                                        trailing:
+                                                            ElevatedButton(
+                                                          child:
+                                                              Text("Connect"),
+                                                          onPressed: () {},
+                                                        ),
+                                                      );
+                                                    }),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          return Center(child: Text("No data"));
+                        }
+                      }),
+                  // STTPage(getUsers: x),
                   // Container(
                   //   color: Colors.red,
                   // ),

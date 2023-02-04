@@ -14,9 +14,10 @@ import '../constants/queries.dart';
 
 class STTPage extends StatefulWidget {
   // Future<List<User>?> getUsers;
+  List<User> getUsers;
   STTPage({
     Key? key,
-    // required this.getUsers,
+    required this.getUsers,
   }) : super(key: key);
 
   @override
@@ -77,6 +78,7 @@ class _STTPageState extends State<STTPage> {
                           style: TextStyle(fontSize: 20.0),
                         ),
                       ),
+                      Text(widget.getUsers[0].toString()),
                       // FutureBuilder(
                       //   future: widget.getUsers,
                       //   builder: ((context, snapshot){
@@ -117,7 +119,7 @@ class _STTPageState extends State<STTPage> {
                           onPressed: () {},
                         ),
                       ),
-                                            ListTile(
+                      ListTile(
                         leading: CircleAvatar(backgroundColor: Colors.blue),
                         title: Text("Name"),
                         trailing: ElevatedButton(

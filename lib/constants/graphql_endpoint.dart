@@ -5,7 +5,7 @@ class GraphQLEndPoints{
   ValueNotifier<GraphQLClient> getClient(){
     ValueNotifier<GraphQLClient> client = ValueNotifier(
       GraphQLClient(
-        link: HttpLink("http://192.168.142.210:8080/graphql"),//TODO: ADD API LINK
+        link: HttpLink("https://relay-backend.azurewebsites.net/graphql"),//TODO: ADD API LINK
         cache: GraphQLCache(),
       )
     );
@@ -14,7 +14,7 @@ class GraphQLEndPoints{
   ValueNotifier<GraphQLClient> getClientWithToken(String token) {
     ValueNotifier<GraphQLClient> client = ValueNotifier(GraphQLClient(
       link: HttpLink(
-        "http://192.168.142.210:8080/graphql", //TODO: ADD URL
+        "https://relay-backend.azurewebsites.net/graphql", //TODO: ADD URL
         defaultHeaders: {
           'Authorization': 'Bearer $token',
         },

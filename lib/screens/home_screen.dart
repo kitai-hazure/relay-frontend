@@ -99,13 +99,25 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     socket.on("request-call", (data) {
       print("CALL REQUEST");
+      print("DATA $data");
       showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-                content: Column(
-                  children: [Text(data["msg"].toString())],
-                ),
+                title: Text(data["name"].toString()+ " wants to chat"),
+                actions: [
+                  ElevatedButton(onPressed: (){
+                    socket.emit("joinRoom", {"room": data["fromId"]+data["toId"], "token": token});
+                  }, child: const Text("Accept")),
+                  ElevatedButton(onPressed: (){
+                    Navigator.pop(context);
+                  }, child: const Text("Reject"))
+                ],
+                content: Text("Connect and grow"),
               ));
+    });
+
+    socket.on("joinedRoom",(data){
+      print("DATAAAA $data");
     });
 
     socket.onDisconnect((_) => print('Connection Disconnection'));

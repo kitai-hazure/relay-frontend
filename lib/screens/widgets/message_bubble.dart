@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -73,18 +74,14 @@ class MessageBubble extends StatelessWidget {
             isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           // if isMe then show avatar to the right of the container
-          if (!isMe)
-            CircleAvatar(
-              backgroundColor: Colors.transparent,
-              backgroundImage: const AssetImage('assets/bot_icon.png'),
-            ),
           if (isMe)
             Row(
               children: [
                 IconButton(
-                  onPressed: () {
-
-                    tts.setLanguage("gu-IN");
+                  onPressed: ()async{
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    String locale = prefs.getString("locale")!;
+                    tts.setLanguage(locale);
                     tts.speak(message);
                   },
                   icon: const Icon(Icons.volume_up),
@@ -96,8 +93,10 @@ class MessageBubble extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  onPressed: () {
-                    tts.setLanguage("gu-IN");
+                  onPressed: () async{
+                     SharedPreferences prefs = await SharedPreferences.getInstance();
+                    String locale = prefs.getString("locale")!;
+                    tts.setLanguage(locale);
                     tts.speak(message);
                   },
                   icon: const Icon(Icons.volume_up),

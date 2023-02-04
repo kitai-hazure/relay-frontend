@@ -6,6 +6,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:http/http.dart' as http;
 import 'package:relay/screens/widgets/message_bubble.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -160,17 +161,10 @@ class _NewMessageState extends State<NewMessage> {
   }
 
   void _startListeningText() async {
-    var locales = await _speechToText.locales();
-    // print("LOCALES: " + locales.length.toString());
-    final Locale appLocale = Localizations.localeOf(context);
-    // print(appLocale.toString());
-    await _speechToText.listen(onResult: _onSpeechResultText, localeId: "hi");
-    // if (appLocale.toString() == "es") {
-    //   await _speechToText.listen(
-    //       onResult: _onSpeechResultText, localeId: appLocale.toLanguageTag());
-    //   setState(() {});
-    //   return;
-    // }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String locale = preferences.getString("locale")!;
+    print("locale");
+    await _speechToText.listen(onResult: _onSpeechResultText, localeId: locale);
     await _speechToText.listen(onResult: _onSpeechResultText);
     setState(() {});
   }

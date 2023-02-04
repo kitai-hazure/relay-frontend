@@ -103,20 +103,24 @@ class _HomeScreenState extends State<HomeScreen> {
       showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-                title: Text(data["name"].toString()+ " wants to chat"),
+                title: Text(data["name"].toString() + " wants to chat"),
                 actions: [
-                  ElevatedButton(onPressed: (){
-                    socket.emit("joinRoom", {"room": data["fromId"]+data["toId"], "token": token});
-                  }, child: const Text("Accept")),
-                  ElevatedButton(onPressed: (){
-                    Navigator.pop(context);
-                  }, child: const Text("Reject"))
+                  ElevatedButton(
+                      onPressed: () {
+                        _acceptPressed(data["fromId"], data["toId"]);
+                      },
+                      child: const Text("Accept")),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Reject"))
                 ],
                 content: Text("Connect and grow"),
               ));
     });
 
-    socket.on("joinedRoom",(data){
+    socket.on("joinedRoom", (data) {
       print("DATAAAA $data");
     });
 
@@ -172,12 +176,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _requestConnect(String toID) {
+    Navigator.pop(context);
     print("in request connect");
     String fromID = "63de7963dbdae42975eb0ec0";
     socket.emit("request-call", {"fromId": fromID, "toId": toID});
-    // socket.emit("request-call", jsonEncode({"fromId": fromID, "toId": toID}));
+    socket.emit("joinRoom", {"room": fromID + toID, "token": token});
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (ctx) => ChatScreen()));
   }
 
+  _acceptPressed(String fromID, String toID) {
+    print("ACCEPTED");
+    socket.emit("joinRoom", {"room": fromID + toID, "token": token});
+    print("LOL HERE");
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (ctx) => ChatScreen()));
+  }
   // _listenCall() {
   //   socket.on("request-call", (data) {
   //     print("CALL REQUEST");

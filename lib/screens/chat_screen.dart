@@ -38,12 +38,12 @@ class Item {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  
   List<Map<dynamic, dynamic>> messages = [];
 
   void _addMessage(String message, bool isUser, String userName) {
     print("lol above");
-    widget.socket.emit('chat', {"room" : widget.room, "msg": message, "token":widget.token});
+    widget.socket.emit(
+        'chat', {"room": widget.room, "msg": message, "token": widget.token});
     print("lol below");
     setState(() {
       messages.insert(0, {
@@ -54,15 +54,14 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print(widget.socket.hasListeners('chat'));
-    widget.socket.on('chat',((data){
+    widget.socket.on('chat', ((data) {
       print("CHAT DATA");
-      print(data);
+      print(data["data"]);
       setState(() {
         messages.insert(0, {
           'message': data["data"],
@@ -88,6 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
 class Messages extends StatelessWidget {
   final List<Map<dynamic, dynamic>> messages;
   Messages(this.messages);
@@ -97,10 +97,12 @@ class Messages extends StatelessWidget {
       // padding: EdgeInsets.all(8),
       color: Colors.black12,
       child: ListView.builder(
-          // reverse: true,
+          reverse: true,
           itemCount: messages.length,
-          itemBuilder: (ctx, index) => MessageBubble(messages[index]['message'],
-              messages[index]['isUserMessage'], messages[index]['username'])),
+          itemBuilder: (ctx, index) => MessageBubble(
+              messages[index]['message'],
+              messages[index]['isUserMessage'],
+              messages[index]['username'] ?? "Akhilesh")),
     );
   }
 }
@@ -111,6 +113,7 @@ class NewMessage extends StatefulWidget {
   @override
   State<NewMessage> createState() => _NewMessageState();
 }
+
 class _NewMessageState extends State<NewMessage> {
   final _controller = new TextEditingController();
   String hintText = "";
@@ -164,9 +167,7 @@ class _NewMessageState extends State<NewMessage> {
     // print("LOCALES: " + locales.length.toString());
     final Locale appLocale = Localizations.localeOf(context);
     // print(appLocale.toString());
-    await _speechToText.listen(
-      onResult: _onSpeechResultText, localeId: "hi"
-    );
+    await _speechToText.listen(onResult: _onSpeechResultText, localeId: "hi");
     // if (appLocale.toString() == "es") {
     //   await _speechToText.listen(
     //       onResult: _onSpeechResultText, localeId: appLocale.toLanguageTag());

@@ -92,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
           'transports': ['websocket'],
         });
     socket.connect();
-
     socket.onConnect((_) async {
       print('Connection established');
       await _getUsers(token);
@@ -176,13 +175,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _requestConnect(String toID) {
-    Navigator.pop(context);
+    // Navigator.pop(context);
     print("in request connect");
     String fromID = "63de7963dbdae42975eb0ec0";
     socket.emit("request-call", {"fromId": fromID, "toId": toID});
     socket.emit("joinRoom", {"room": fromID + toID, "token": token});
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (ctx) => ChatScreen()));
+        .push(MaterialPageRoute(builder: (ctx) => ChatScreen(
+          socket: socket, room: fromID + toID,token: token,
+        )));
   }
 
   _acceptPressed(String fromID, String toID) {
@@ -190,7 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
     socket.emit("joinRoom", {"room": fromID + toID, "token": token});
     print("LOL HERE");
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (ctx) => ChatScreen()));
+        .push(MaterialPageRoute(builder: (ctx) => ChatScreen(
+          socket: socket, room: fromID + toID,token: token,
+        )));
   }
   // _listenCall() {
   //   socket.on("request-call", (data) {

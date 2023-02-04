@@ -92,10 +92,21 @@ class _HomeScreenState extends State<HomeScreen> {
           'transports': ['websocket'],
         });
     socket.connect();
+
     socket.onConnect((_) async {
       print('Connection established');
       await _getUsers(token);
     });
+    socket.on("request-call", (data) {
+      print("CALL REQUEST");
+      if (data.isNotEmpty)
+        AlertDialog(
+          content: Column(
+            children: [Text(data.msg)],
+          ),
+        );
+    });
+
     socket.onDisconnect((_) => print('Connection Disconnection'));
     socket.onConnectError((err) => print(err));
     socket.onError((err) => print(err));
@@ -150,15 +161,16 @@ class _HomeScreenState extends State<HomeScreen> {
   _requestConnect(String toID) {
     print("in request connect");
     String fromID = "63de7963dbdae42975eb0ec0";
-    socket.emit("request-call", jsonEncode({"fromId": fromID, "toId": toID}));
+    socket.emit("request-call", {"fromId": fromID, "toId": toID});
+    // socket.emit("request-call", jsonEncode({"fromId": fromID, "toId": toID}));
   }
 
-  _listenCall() {
-    socket.on("request-call", (data) {
-      print("CALL REQUEST");
-      print(data);
-    });
-  }
+  // _listenCall() {
+  //   socket.on("request-call", (data) {
+  //     print("CALL REQUEST");
+  //     print(data);
+  //   });
+  // }
 
   @override
   void initState() {
@@ -175,7 +187,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _listenCall();
     // print(_currentPosition.latitude.toString() + "LOLL");
     return isLoading
         ? const Center(

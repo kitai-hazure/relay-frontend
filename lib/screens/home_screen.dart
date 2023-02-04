@@ -99,12 +99,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     socket.on("request-call", (data) {
       print("CALL REQUEST");
-      if (data.isNotEmpty)
-        AlertDialog(
-          content: Column(
-            children: [Text(data.msg)],
-          ),
-        );
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                content: Column(
+                  children: [Text(data["msg"].toString())],
+                ),
+              ));
     });
 
     socket.onDisconnect((_) => print('Connection Disconnection'));

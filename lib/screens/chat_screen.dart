@@ -65,7 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
       print(data);
       setState(() {
         messages.insert(0, {
-          'message': data["message"],
+          'message': data["data"],
           'isUserMessage': false,
           'userName': "Other"
         });

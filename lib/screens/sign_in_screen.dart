@@ -28,19 +28,19 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   GoogleSignInAccount? _currentUser;
   bool isLoading = false;
+  
   Future<void> backendUpload(
       {required String email,
       required String name,
       required String language,
       String? profilePicture,
       required context}) async {
-    setState(() {
-      isLoading = true;
-    });
+    print("BACKEND UPLOAD CALLED");
 
     final GraphQLEndPoints point = GraphQLEndPoints();
     ValueNotifier<GraphQLClient> client = point.getClient();
 
+    print("ENDPOINTS FINE");
     QueryResult result = await client.value.mutate(MutationOptions(
         document: gql(Queries.signup()),
         variables: {
@@ -53,15 +53,12 @@ class _SignInScreenState extends State<SignInScreen> {
         }));
 
     if (result.hasException) {
-      //print(result.exception);
-      setState(() {
-        isLoading = false;
-      });
+      print(result.exception);
 
       if (result.exception!.graphqlErrors.isEmpty) {
         print(result.exception.toString());
       } else {
-        //print(result.exception!.graphqlErrors[0].message.toString());
+        print(result.exception!.graphqlErrors[0].message.toString());
       }
     } else {
       print(result.data);

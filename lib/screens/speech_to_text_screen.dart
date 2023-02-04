@@ -1,79 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:lottie/lottie.dart';
-import 'package:relay/screens/sign_in_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
+import 'package:relay/models/user_model.dart';
+import 'package:relay/screens/sign_in_screen.dart';
+
+import '../constants/graphql_endpoint.dart';
+import '../constants/queries.dart';
+
 class STTPage extends StatefulWidget {
-  STTPage({Key? key}) : super(key: key);
+  // Future<List<User>?> getUsers;
+  STTPage({
+    Key? key,
+    // required this.getUsers,
+  }) : super(key: key);
 
   @override
   _STTPageState createState() => _STTPageState();
 }
 
 class _STTPageState extends State<STTPage> {
-  SpeechToText _speechToText = SpeechToText();
-  bool _speechEnabled = false;
-  String _lastWords = '';
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _initSpeech();
-  }
-
-  Future<void> _handleSignOut() async {
-    try {
-      GoogleSignInAccount? acc = await GoogleSignIn().disconnect();
-      print(acc);
-      final prefs = await SharedPreferences.getInstance();
-      prefs.remove("isLoggedIn");
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => SignInScreen()),
-        );
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  /// This has to happen only once per app
-  void _initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
-    setState(() {});
-  }
-
-  /// Each time to start a speech recognition session
-  void _startListening() async {
-    var locales = await _speechToText.locales();
-
-    // Some UI or other code to select a locale from the list
-    // resulting in an index, selectedLocale
-    _speechToText.listen(
-      onResult: _onSpeechResult,
-      localeId: "hi",
-    );
-    await _speechToText.listen(onResult: _onSpeechResult);
-    setState(() {});
-  }
-
-  /// Manually stop the active speech recognition session
-  /// Note that there are also timeouts that each platform enforces
-  /// and the SpeechToText plugin supports setting timeouts on the
-  /// listen method.
-  void _stopListening() async {
-    await _speechToText.stop();
-    setState(() {});
-  }
-
-  /// This is the callback that the SpeechToText plugin calls when
-  /// the platform returns recognized words.
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      _lastWords = result.recognizedWords;
-    });
+    // _initSpeech();
   }
 
   @override
@@ -121,19 +77,54 @@ class _STTPageState extends State<STTPage> {
                           style: TextStyle(fontSize: 20.0),
                         ),
                       ),
-                      // Container(
-                      //     margin: EdgeInsets.all(10),
-                      //     decoration: BoxDecoration(
-                      //         color: Colors.grey,
-                      //         borderRadius:
-                      //             BorderRadius.all(Radius.circular(20))),
-                      //     child: ListTile(
-                      //       title: Text("Log Out"),
-                      //       trailing: IconButton(
-                      //         icon: Icon(Icons.logout),
-                      //         onPressed: _handleSignOut,
-                      //       ),
-                      //     ))
+                      // FutureBuilder(
+                      //   future: widget.getUsers,
+                      //   builder: ((context, snapshot){
+                      //     if(snapshot.connectionState == ConnectionState.waiting){
+                      //       return CircularProgressIndicator();
+                      //     }
+                      //     print(snapshot.hasData);
+                      //     if(snapshot.hasData){
+                      //       return ListTile(
+                      //         title: Text("has data"),
+                      //       );
+                      //     }
+
+                      //     return Text("No data");
+                      //   })
+                      // )
+                      ListTile(
+                        leading: CircleAvatar(backgroundColor: Colors.red),
+                        title: Text("Akhilesh Manda"),
+                        trailing: ElevatedButton(
+                          child: Text("Connect"),
+                          onPressed: () {},
+                        ),
+                      ),
+                      ListTile(
+                        leading: CircleAvatar(backgroundColor: Colors.orange),
+                        title: Text("Dhruv Dave"),
+                        trailing: ElevatedButton(
+                          child: Text("Connect"),
+                          onPressed: () {},
+                        ),
+                      ),
+                      ListTile(
+                        leading: CircleAvatar(backgroundColor: Colors.yellow),
+                        title: Text("Kalash Shah"),
+                        trailing: ElevatedButton(
+                          child: Text("Connect"),
+                          onPressed: () {},
+                        ),
+                      ),
+                                            ListTile(
+                        leading: CircleAvatar(backgroundColor: Colors.blue),
+                        title: Text("Name"),
+                        trailing: ElevatedButton(
+                          child: Text("Connect"),
+                          onPressed: () {},
+                        ),
+                      )
                     ],
                   ),
                 ),

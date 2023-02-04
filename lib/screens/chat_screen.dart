@@ -58,6 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // TODO: implement initState
     super.initState();
     widget.socket.on('chat',((data){
+      print("CHAT DATA");
       print(data);
     }));
   }

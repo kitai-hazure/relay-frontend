@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       Expanded(
-                                        flex: 5,
+                                        flex: 11,
                                         child: Stack(
                                           children: [
                                             LottieBuilder.asset(
@@ -335,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             );
                           }
-                          return Center(child: Text("No data"));
+                          return Center(child: Text("No User Found"));
                         }
                       }),
                   // STTPage(getUsers: x),

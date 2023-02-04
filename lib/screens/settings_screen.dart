@@ -17,12 +17,16 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   GoogleSignInAccount? googleUse;
   bool isLoading = true;
+  late String init;
   _getAccount() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String locale = prefs.getString('locale')!;
     print(googleUser);
     setState(() {
       googleUse = googleUser;
       isLoading = false;
+      init = locale;
     });
   }
 
@@ -45,8 +49,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _getAccount();
   }
 
-  // Initial Selected Value
-  String dropdownvalue = "en";
   // List of items in our dropdown menu
   var items = [
     'en',
@@ -92,7 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: DropdownButton(
-                      value: dropdownvalue,
+                      value: init,
                       isExpanded: true,
                       // Down Arrow Icon
                       icon: const Icon(Icons.language),
@@ -111,7 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         prefs.setString("locale", newValue!);
 
                         setState(() {
-                          dropdownvalue = newValue;
+                          init = newValue;
                         });
                       },
                     ),

@@ -81,6 +81,7 @@ class MessageBubble extends StatelessWidget {
                   onPressed: ()async{
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     String locale = prefs.getString("locale")!;
+                    print(locale);
                     tts.setLanguage(locale);
                     tts.speak(message);
                   },

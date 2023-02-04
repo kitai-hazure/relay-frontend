@@ -41,9 +41,10 @@ class _ChatScreenState extends State<ChatScreen> {
   
   List<Map<dynamic, dynamic>> messages = [];
 
-  void _addMessage(dynamic message, bool isUser, String userName) {
-    // print('inside _add msg: $message is user: $isUser');
+  void _addMessage(String message, bool isUser, String userName) {
+    print("lol above");
     widget.socket.emit('chat', {"room" : widget.room, "msg": message, "token":widget.token});
+    print("lol below");
     setState(() {
       messages.insert(0, {
         'message': message,
@@ -52,11 +53,16 @@ class _ChatScreenState extends State<ChatScreen> {
       });
     });
   }
+
+  void initSocket(){
+    
+  }
   
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    print(widget.socket.hasListeners('chat'));
     widget.socket.on('chat',((data){
       print("CHAT DATA");
       print(data);
@@ -87,7 +93,7 @@ class Messages extends StatelessWidget {
       // padding: EdgeInsets.all(8),
       color: Colors.black12,
       child: ListView.builder(
-          reverse: true,
+          // reverse: true,
           itemCount: messages.length,
           itemBuilder: (ctx, index) => MessageBubble(messages[index]['message'],
               messages[index]['isUserMessage'], messages[index]['username'])),

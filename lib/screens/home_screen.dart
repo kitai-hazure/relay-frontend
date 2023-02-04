@@ -123,6 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
       print("DATAAAA $data");
     });
 
+    socket.on("chat", (data){
+      print("CHAT DATAAAA $data");
+    });
+
     socket.onDisconnect((_) => print('Connection Disconnection'));
     socket.onConnectError((err) => print(err));
     socket.onError((err) => print(err));

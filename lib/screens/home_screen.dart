@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -145,6 +147,19 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  _requestConnect(String toID) {
+    print("in request connect");
+    String fromID = "63de7963dbdae42975eb0ec0";
+    socket.emit("request-call", jsonEncode({"fromId": fromID, "toId": toID}));
+  }
+
+  _listenCall() {
+    socket.on("request-call", (data) {
+      print("CALL REQUEST");
+      print(data);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -160,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _listenCall();
     // print(_currentPosition.latitude.toString() + "LOLL");
     return isLoading
         ? const Center(
@@ -253,7 +269,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             ElevatedButton(
                                                           child:
                                                               Text("Connect"),
-                                                          onPressed: () {},
+                                                          onPressed: () {
+                                                            _requestConnect(
+                                                                snapshot
+                                                                    .data![
+                                                                        index]
+                                                                    .id);
+                                                          },
                                                         ),
                                                       );
                                                     }),

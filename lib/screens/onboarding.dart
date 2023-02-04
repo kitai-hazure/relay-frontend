@@ -10,15 +10,15 @@ class OnboardingPage extends StatelessWidget {
     OnBoardingData(
       title: "Connect",
       subtitle:
-          "Connect your Codeforces, Leetcode, GitHub accounts all in one app",
+          "Maintain connections with the people irrespective of other factors",
       image: LottieBuilder.asset("assets/lottie/onboarding-1.json"),
       backgroundColor: const Color.fromRGBO(0, 10, 56, 1),
       titleColor: Colors.pink,
       subtitleColor: Colors.white,
     ),
     OnBoardingData(
-      title: "Code",
-      subtitle: "Keep coding effectively while we help you keep track of your strength and weaknesses",
+      title: "Breaking Barriers",
+      subtitle: "Use our application and minimize language barrier around the globe",
       image: LottieBuilder.asset("assets/lottie/onboarding-2.json"),
       backgroundColor: Colors.white,
       titleColor: Colors.purple,
@@ -26,7 +26,7 @@ class OnboardingPage extends StatelessWidget {
     ),
     OnBoardingData(
       title: "Collaborate",
-      subtitle: "Collaborate with developers across the world and build innovative products",
+      subtitle: "Collaborate and make the world an inclusive and better place",
       image: LottieBuilder.asset("assets/lottie/onboarding-3.json"),
       backgroundColor: const Color.fromRGBO(71, 59, 117, 1),
       titleColor: Colors.yellow,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lottie/lottie.dart';
 import 'package:relay/models/language_model.dart';
 import 'package:relay/screens/sign_in_screen.dart';
 import 'package:relay/screens/sign_in_screen.dart';
@@ -21,7 +22,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   _getAccount() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String locale = prefs.getString('locale')!;
+    String locale = prefs.getString('locale') ?? "en";
     print(googleUser);
     setState(() {
       googleUse = googleUser;
@@ -68,12 +69,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
           : SafeArea(
               child: Column(
               // mainAxisAlignment: MainAxisAlignmen
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                LottieBuilder.asset("assets/lottie/profile.json"),
+                const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    "User",
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: Color.fromARGB(255, 206, 219, 225),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   child: ListTile(
                     leading: CircleAvatar(backgroundColor: Colors.red),
@@ -81,11 +93,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     subtitle: Text(googleUse!.email),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("Language Preferences"),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Language Preferences",
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                Divider(),
+                // Divider(),
                 Container(
                   margin: EdgeInsets.all(10),
                   decoration: BoxDecoration(
@@ -94,6 +112,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: DropdownButton(
+                      borderRadius: BorderRadius.circular(20),
+                      elevation: 0,
+                      // style: BorderStyle.none,
                       value: init,
                       isExpanded: true,
                       // Down Arrow Icon
@@ -102,7 +123,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       items: items.map((String items) {
                         return DropdownMenuItem(
                           value: items,
-                          child: Text(items),
+                          child: Text(items, style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500
+                          ),),
                         );
                       }).toList(),
                       // After selecting the desired option,it will

@@ -115,12 +115,15 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Column(
               children: [
                 LottieBuilder.asset("assets/lottie/onboarding-1.json"),
-                const Text("Let's Get You Signed Up")
+                const Text("Let's Get You Signed Up", style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),)
               ],
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 40,
           ),
           GestureDetector(
             onTap: () {
@@ -128,7 +131,7 @@ class _SignInScreenState extends State<SignInScreen> {
             },
             child: Container(
               // height: 20,
-              width: 250,
+              width: 300,
               decoration: BoxDecoration(
                 color: Colors.blue,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -137,11 +140,14 @@ class _SignInScreenState extends State<SignInScreen> {
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FaIcon(FontAwesomeIcons.googlePlusG),
+                  child: FaIcon(FontAwesomeIcons.googlePlusG, color: Colors.white,),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Sign In With Google"),
+                  child: Text("Sign In With Google", style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20
+                  ),),
                 )
               ]),
             ),

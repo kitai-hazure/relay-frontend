@@ -223,9 +223,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // print(_currentPosition.latitude.toString() + "LOLL");
     return isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
+        ? Scaffold(
+          body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+        )
         : Scaffold(
             // appBar: AppBar(title: Text("Bottom Nav Bar")),
             body: SizedBox.expand(
@@ -255,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       Expanded(
-                                        flex: 11,
+                                        flex: 6,
                                         child: Stack(
                                           children: [
                                             LottieBuilder.asset(
@@ -290,11 +292,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Container(
                                                 padding: EdgeInsets.all(16),
                                                 child: Text(
-                                                  'Users near you.....',
+                                                  'Users near you...',
                                                   style:
                                                       TextStyle(fontSize: 20.0),
                                                 ),
                                               ),
+                                              snapshot.data!.length !=0?
                                               Expanded(
                                                 child: ListView.builder(
                                                     physics:
@@ -324,6 +327,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ),
                                                       );
                                                     }),
+                                              ): Column(
+                                                children: [
+                                                  LottieBuilder.asset("assets/lottie/no_users.json"),
+                                                  Text("No Users Found", style: TextStyle(
+                                                    fontSize: 20
+                                                  )),
+                                                ],
                                               ),
                                             ],
                                           ),

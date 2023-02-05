@@ -60,6 +60,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     'ab',
     'cs',
     'ca',
+    "es",
+    "fr"
   ];
 
   _updateLanguage(String new_locale)async{
@@ -71,7 +73,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     QueryResult result = await client.value.mutate(MutationOptions(
       document: gql(Queries.updateLanguage()),
       variables: {
-        "input": new_locale
+        "input": {
+          "lang":new_locale
+        }
       }
     ));
 

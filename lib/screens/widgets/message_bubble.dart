@@ -10,7 +10,7 @@ class MessageBubble extends StatelessWidget {
   TextToSpeech tts = TextToSpeech();
 
   Widget messageContainer(BuildContext context) {
-  final Locale appLocale = Localizations.localeOf(context);
+    final Locale appLocale = Localizations.localeOf(context);
     return Container(
       decoration: BoxDecoration(
         color: isMe ? const Color.fromARGB(255, 0, 166, 36) : Colors.white,
@@ -33,13 +33,6 @@ class MessageBubble extends StatelessWidget {
               crossAxisAlignment:
                   isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
-                Text(
-                  username,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: isMe ? Colors.grey[300] : Colors.black,
-                  ),
-                ),
                 Text(
                   message,
                   style: TextStyle(
@@ -78,8 +71,9 @@ class MessageBubble extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  onPressed: ()async{
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
                     String locale = prefs.getString("locale")!;
                     print(locale);
                     tts.setLanguage(locale);
@@ -94,8 +88,9 @@ class MessageBubble extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  onPressed: () async{
-                     SharedPreferences prefs = await SharedPreferences.getInstance();
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
                     String locale = prefs.getString("locale")!;
                     tts.setLanguage(locale);
                     tts.speak(message);

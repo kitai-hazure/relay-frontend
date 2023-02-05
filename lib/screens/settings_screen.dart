@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:relay/constants/graphql_endpoint.dart';
+import 'package:relay/constants/queries.dart';
 import 'package:relay/models/language_model.dart';
 import 'package:relay/screens/sign_in_screen.dart';
 import 'package:relay/screens/sign_in_screen.dart';
@@ -58,6 +61,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
     'cs',
     'ca',
   ];
+
+  _updateLanguage(String new_locale)async{
+    SharedPreferences prefs =  await SharedPreferences.getInstance();
+    String token = prefs.getString('token')!;
+        final GraphQLEndPoints point = GraphQLEndPoints();
+    ValueNotifier<GraphQLClient> client = point.getClientWithToken(token);
+
+    QueryResult result = await client.value.mutate(MutationOptions(
+      document: gql(Queries.updateLanguage()),
+      variables: {
+        "input": new_locale
+      }
+    ));
+
+    if (result.hasException) {
+      //print(result.exception);
+
+      if (result.exception!.graphqlErrors.isEmpty) {
+        print("EXCEPTION HERE");
+        print(result.exception.toString());
+      } else {
+        print("EXCEPTION HERE");
+        print(result.exception!.graphqlErrors[0].message.toString());
+      }
+    } else {
+      print("RUNNN");
+      print(result.data);
+      print("DONE");
+    }
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     print(googleUse);
@@ -135,7 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         prefs.setString("locale", newValue!);
-
+                        _updateLanguage(newValue);
                         setState(() {
                           init = newValue;
                         });

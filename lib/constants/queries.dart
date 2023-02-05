@@ -32,4 +32,13 @@ query FindPeople {
 }
     """;
   }
+
+  static String updateLanguage() {
+    return """
+mutation UpdateLanguage(\$input: UpdateLanguageInput!) {
+  updateLanguage(input: \$input)
+}
+
+""";
+  }
 }
